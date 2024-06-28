@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "dependencies": {
+    "alasql": "^4.4.0",
+    "save-dev": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "esbuild": "^0.21.5"
+  },
+  "scripts": {
+    "bundle": "npx esbuild ./src/entry.js --bundle --outfile=dist/bundle.js --format=iife --target=es6"
+  }
+}
