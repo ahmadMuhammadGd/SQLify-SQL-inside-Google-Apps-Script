@@ -1,6 +1,9 @@
 
 # SQLify-AppsScript
-![SQLify for Apps Script Logo](assets/logo/logo.jpg)
+<p align="center">
+  <img src="assets/logo/logo.jpg" alt="SQLify for Apps Script Logo">
+</p>
+
 ## Introduction
 Handling data manipulation tasks in vanilla JavaScript can be cumbersome, often leading to debugging challenges and error-prone code. SQLify for Apps Script simplifies these tasks by bringing the power of SQL to data manipulation and management within Google Apps Script environments.
 
