@@ -114,10 +114,10 @@ function main(){
   console.log(result);
   console.log(`result2DArray:`);
   console.log(result2DArray);
+  }
   // result:
   //  [ { name: 'bob', age: 25 }, { name: 'john', age: 20 } ]
   //
   // result2DArray:
   //  [ [ 'name', 'age' ], [ 'bob', 25 ], [ 'john', 20 ] ]
-  }
 ```
