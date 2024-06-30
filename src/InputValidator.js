@@ -13,11 +13,21 @@ export default class InputValidator {
     return false;
   }
 
-  isValidTable(dict) {
-    return  typeof dict === 'object' && 
-            dict !== null && 
-            Object.keys(dict).length > 0;
+  isValidTable(table) {
+    const isDict = (dict) => {
+      return typeof dict === 'object' &&  // Ensure object type
+        !Array.isArray(dict) &&     // Ensure not an array
+        dict !== null &&            // Ensure not null
+        Object.keys(dict).length > 0; // Ensure has keys
+    };
+
+    if (Array.isArray(table) && table.length > 0) {
+      let res = true;
+      table.forEach(dict => {
+        res = res && isDict(dict);
+      });
+      return res;
+    }
+    return false;
   }
 }
-
-
