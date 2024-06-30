@@ -9,7 +9,7 @@ export default class Table {
 
     get_table(arr) {
         if (!this.validator.is2DArray(arr) || !this.validator.isValidArray(arr)) {
-            console.log(`invalid array: ${arr}`);
+            console.log(`invalid array:`, arr);
             throw new Error('Invalid array');
         }
 
