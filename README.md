@@ -2,6 +2,7 @@
 <p align="center">
   <img src="assets/logo/logo.jpg" alt="SQLify for Apps Script Logo">
 </p>
+
 ## Introduction
 SQLify for Apps Script simplifies data manipulation tasks within Google Apps Script by integrating SQL capabilities. It allows you to handle data more efficiently, leveraging the power of SQL queries directly within your Apps Script projects.
 
