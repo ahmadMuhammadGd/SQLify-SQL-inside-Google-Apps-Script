@@ -7584,8 +7584,21 @@ Expecting ` + p4.join(", ") + ", got '" + (this.terminals_[B2] || B2) + "'" : U3
       }
       return false;
     }
-    isValidTable(dict) {
-      return typeof dict === "object" && dict !== null && Object.keys(dict).length > 0;
+    isValidTable(table) {
+      const isDict = (dict) => {
+        return typeof dict === "object" && // Ensure object type
+        !Array.isArray(dict) && // Ensure not an array
+        dict !== null && // Ensure not null
+        Object.keys(dict).length > 0;
+      };
+      if (Array.isArray(table) && table.length > 0) {
+        let res2 = true;
+        table.forEach((dict) => {
+          res2 = res2 && isDict(dict);
+        });
+        return res2;
+      }
+      return false;
     }
   };
 
@@ -7633,7 +7646,7 @@ Input Array:${array2D}`);
     }
     get_array(dict) {
       if (!this.validator.isValidTable(dict)) {
-        console.log(`Invalid Table: ${dict}`);
+        console.log(`Invalid Table:`, dict);
         throw new Error("invalid table");
       }
       const headers = Object.keys(dict[0]);
@@ -7646,8 +7659,38 @@ Input Array:${array2D}`);
   var import_alasql = __toESM(require_alasql_min(), 1);
   var SQLify = class {
     constructor() {
-      this.tableModule = new Table();
-      this.alasqlInstance = import_alasql.default;
+      this.alasql = import_alasql.default;
+    }
+    load2DArrayAsTable(tableName, array2D) {
+      const tableHelper = new Table();
+      const jsonData = tableHelper.get_table(array2D);
+      this.loadJsonAsTable(tableName, jsonData);
+    }
+    loadJsonAsTable(tableName, jsonData) {
+      console.log(tableName, jsonData);
+      const validator = new InputValidator();
+      if (!validator.isValidTable(jsonData)) {
+        console.log(`the input:`, jsonData, `is not valid table.`);
+        throw new Error("Invalid Table");
+      }
+      const columns = Object.keys(jsonData[0]).map((col) => `${col} TEXT`).join(", ");
+      const placeholders = Object.keys(jsonData[0]).map(() => "?").join(", ");
+      this.alasql(`CREATE TABLE IF NOT EXISTS ${tableName} (${columns});`);
+      const insertStmt = this.alasql.compile(`INSERT INTO ${tableName} VALUES (${placeholders});`);
+      jsonData.forEach((item) => {
+        insertStmt(Object.values(item));
+      });
+    }
+    execSQL(query, params) {
+      if (params) {
+        return (0, import_alasql.default)(query, params);
+      } else {
+        return (0, import_alasql.default)(query);
+      }
+    }
+    getGASfriendlyResults(results) {
+      const tableHelper = new Table();
+      return tableHelper.get_array(results);
     }
   };
 
