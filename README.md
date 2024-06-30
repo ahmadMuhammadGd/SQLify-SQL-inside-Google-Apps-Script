@@ -1,120 +1,171 @@
-
 # SQLify-AppsScript
 ![SQLify for Apps Script Logo](assets/logo/logo.jpg)
+
 ## Introduction
-Handling data manipulation tasks in vanilla JavaScript can be cumbersome, often leading to debugging challenges and error-prone code. SQLify for Apps Script simplifies these tasks by bringing the power of SQL to data manipulation and management within Google Apps Script environments.
+SQLify for Apps Script simplifies data manipulation tasks within Google Apps Script by integrating SQL capabilities. It allows you to handle data more efficiently, leveraging the power of SQL queries directly within your Apps Script projects.
 
+## What is New
+- **Enhanced Table Loading:** Improved methods for loading 2D arrays into SQL tables, ensuring compatibility with complex data structures.
+- **Improved Integration:** Streamlined integration with AlaSQL, ensuring seamless data operations within Apps Script workflows.
 ## Features
-- **SQL Power**: Execute SQL queries directly within Google Apps Script using AlaSQL, enhancing data querying and manipulation capabilities.
-- **Simplified Workflow**: Provides intuitive functions for converting data between formats and executing SQL queries effortlessly.
+- **Efficient Data Handling**: Seamlessly manage and manipulate data using SQL queries in your Google Apps Script environment.
+- **Data Validation**: Ensure data integrity with built-in validation for input data structures.
 
-## Database Engine
-SQLify for Apps Script utilizes AlaSQL as its database engine, extending its functionality with additional methods tailored for Apps Script workflows.
+## Database Integration
+SQLify utilizes AlaSQL as its SQL engine, extending its functionalities tailored specifically for Google Apps Script workflows.
 
-> **Important**: Before usage, ensure compatibility with [supported AlaSQL statements](https://github.com/alasql/alasql/wiki/Supported-SQL-statements).
+> **Note**: Please ensure compatibility with [supported AlaSQL statements](https://github.com/alasql/alasql/wiki/Supported-SQL-statements) before usage.
 
-## Setting Up
+## Getting Started
 
 ### Installation
 1. Copy the contents of `./dist/bundle.js` into your Apps Script project's module or code editor.
 
 ### Usage
-Instantiate `SQLify`:
+Initialize `SQLify` in your Apps Script:
+```javascript
+const sqlify = new SQLify();
+```
+Certainly! Here's an improved "Methods Provided" section for the README:
+
+---
+
+## Methods Provided
+
+SQLify for Apps Script offers a range of methods to streamline data manipulation and SQL query execution within Google Apps Script environments:
+
+### Loading Data into a SQL Table
+
+#### `load2DArrayAsTable(tableName, array2D)`
+
+Converts a 2D array of tabular data into a SQL table within AlaSQL.
+
+- **Parameters:**
+  - `tableName`: Name of the SQL table to create if not exists.
+  - `array2D`: 2D array representing tabular data.
+
+- **Usage Example:**
   ```javascript
-  const sqlify = new SQLify();
+  const data = [
+      ['Name', 'Age'],
+      ['Alex', 15],
+      ['Bob', 25],
+      ['Alice', 10],
+      ['John', 20],
+      ['Doe', 18],
+  ];
+  
+  sqlify.load2DArrayAsTable('Members', data);
   ```
 
-## Provided Methods
+### Executing SQL Queries
 
-In Google Apps Script, data often originates from Google Sheets in a tabular format, like this:
+#### `execSQL(query, params?)`
 
-|   | Name     | Age  |
-|---|----------|------|
-| 1 | Alex     | 15   |
-| 2 | Bob      | 25   |
-| 3 | Alice    | 10   |
-| 4 | John     | 20   |
-| 5 | Doe      | 18   |
+Executes an SQL query using AlaSQL, optionally with parameters for prepared statements.
 
-When fetched in Apps Script, this data appears as a 2D array:
+- **Parameters:**
+  - `query`: SQL query string.
+  - `params` (optional): Parameters for prepared statements.
 
-```plaintext
-[['name', 'age'],
-['alex', 15],
-['bob', 25],
-['alice', 10],
-['john', 20],
-['doe', 18]]
-```
+- **Returns:**
+  - Query results.
 
-However, for operations with AlaSQL, this format may not be directly suitable.
+- **Usage Example:**
+  ```javascript
+  const query = `
+      SELECT * FROM Members
+      WHERE Age > 18;
+  `;
+  
+  const result = sqlify.execSQL(query);
+  ```
 
-#### Convert 2D Array to Key-Value Pairs
+### Converting Query Results to 2D Array
 
-```javascript
-sqlify.tableModule.get_table(Array2D);
-```
+#### `getGASfriendlyResults(results)`
 
-- **Functionality**: Converts a 2D array representing tabular data into an array of objects where each object represents a row with column names as keys.
-```javascript
-// output example
-[
-  { name: 'alex', age: 15 },
-  { name: 'bob', age: 25 },
-  { name: 'alice', age: 10 },
-  { name: 'john', age: 20 },
-  { name: 'doe', age: 18 }
-]
-```
-#### Convert Key-Value Pairs to 2D Array
+Converts AlaSQL query results into a 2D array format suitable for processing in Google Apps Script.
 
-```javascript
-sqlify.tableModule.get_array(KeyValueArray);
-```
+- **Parameters:**
+  - `results`: Query results from AlaSQL.
 
-- **Functionality**: Converts an array of objects (where each object represents a row with keys as column names) back into a 2D array format suitable for processing with AlaSQL.
+- **Returns:**
+  - 2D array formatted data.
 
-#### Execute SQL Queries
+- **Usage Example:**
+  ```javascript
+  const query = `
+      SELECT * FROM Members
+      WHERE Age > 18;
+  `;
+  
+  const result = sqlify.execSQL(query);
+  const result2DArray = sqlify.getGASfriendlyResults(result);
+  ```
 
-```javascript
-sqlify.alasqlInstance(query, [KeyValueArray]);
-```
+### Loading JSON Data into a SQL Table
 
-- **Functionality**: Executes SQL queries using AlaSQL, with data provided in the format converted by `get_table`. The query results are transformed back into a 2D array using `get_array`.
+#### `loadJsonAsTable(tableName, jsonData)`
+
+Validates and loads JSON data into a SQL table within AlaSQL.
+
+- **Parameters:**
+  - `tableName`: Name of the SQL table to create or update.
+  - `jsonData`: JSON object or array representing tabular data.
+
+- **Usage Example:**
+  ```javascript
+  const jsonData = [
+      { Name: 'Alex', Age: 15 },
+      { Name: 'Bob', Age: 25 },
+      { Name: 'Alice', Age: 10 },
+      { Name: 'John', Age: 20 },
+      { Name: 'Doe', Age: 18 },
+  ];
+  
+  sqlify.loadJsonAsTable('Members', jsonData);
+  ```
+
+---
+
 
 ### Example Usage
 
 ```javascript
-// Google Apps Script Example
+// Example usage in Google Apps Script
 function main(){
-  let data = [
-      ['name', 'age'],
-      ['alex', 15],
-      ['bob', 25],
-      ['alice', 10],
-      ['john', 20],
-      ['doe', 18],
+  const data = [
+      ['Name', 'Age'],
+      ['Alex', 15],
+      ['Bob', 25],
+      ['Alice', 10],
+      ['John', 20],
+      ['Doe', 18],
   ];
 
   const sqlify = new SQLify();
-  const tableData = sqlify.tableModule.get_table(data);
+  sqlify.load2DArrayAsTable('Members', data);
 
   const query = `
-      SELECT * FROM ? AS members
-      WHERE members.age > 18;
+      SELECT * FROM Members
+      WHERE Age > 18;
   `;
 
-  const result = sqlify.alasqlInstance(query, [tableData]);
-  const result2DArray = sqlify.tableModule.get_array(result);
+  const result = sqlify.execSQL(query);
+  const result2DArray = sqlify.getGASfriendlyResults(result);
 
-  console.log(`Result:`);
+  console.log(`Query Result:`);
   console.log(result);
-  console.log(`result2DArray:`);
+  console.log(`Formatted Result:`);
   console.log(result2DArray);
-  // result:
-  //  [ { name: 'bob', age: 25 }, { name: 'john', age: 20 } ]
+  // Output:
+  // Query Result:
+  // [ { Name: 'Bob', Age: 25 }, { Name: 'John', Age: 20 } ]
   //
-  // result2DArray:
-  //  [ [ 'name', 'age' ], [ 'bob', 25 ], [ 'john', 20 ] ]
-  }
+  // Formatted Result:
+  // [ ['Name', 'Age'], ['Bob', 25], ['John', 20] ]
+}
 ```
+## Contributing
+We welcome contributions to SQLify! Feel free to contribute.
