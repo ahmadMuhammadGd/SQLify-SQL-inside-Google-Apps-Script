@@ -7,7 +7,7 @@
 SQLify for Apps Script simplifies data manipulation tasks within Google Apps Script by integrating SQL capabilities. It allows you to handle data more efficiently, leveraging the power of SQL queries directly within your Apps Script projects.
 
 ## What is New
-- **Enhanced Table Loading:** Improved methods for loading 2D arrays into SQL tables, ensuring compatibility with complex data structures.
+- **Enhanced Table Loading:** Improved methods for loading 2D arrays into SQL tables.
 - **Improved Integration:** Streamlined integration with AlaSQL, ensuring seamless data operations within Apps Script workflows.
 ## Features
 - **Efficient Data Handling**: Seamlessly manage and manipulate data using SQL queries in your Google Apps Script environment.
